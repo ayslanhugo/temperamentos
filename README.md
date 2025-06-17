@@ -1,6 +1,5 @@
 # Teste de Temperamento com Ruby on Rails
 
-
 Esta é uma aplicação web completa, desenvolvida com Ruby on Rails, que permite aos usuários descobrir seu temperamento dominante com base nos quatro temperamentos clássicos da psicologia (Colérico, Sanguíneo, Melancólico e Fleumático). 
 
 O teste foi projetado para ser preciso e interativo, utilizando um sistema de pontuação por intensidade e apresentando os resultados de forma clara e visualmente atraente. Este projeto foi construído como um exercício prático completo, cobrindo desde a configuração inicial do Rails até o design responsivo e funcionalidades interativas com JavaScript.

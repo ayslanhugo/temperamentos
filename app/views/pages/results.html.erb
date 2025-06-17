@@ -1,0 +1,65 @@
+<div class="container result-page">
+  <h1>Seu Resultado</h1>
+
+  <% if @dominant_temperament_name %>
+    <div class="dominant-result">
+
+      <%# A tag h2 agora tem uma classe CSS dinâmica baseada no resultado %>
+      <h2 class="temperament-<%= @dominant_slug %>">
+        <%# Usamos um 'case' para escolher o ícone certo %>
+        <span class="icon">
+          <% case @dominant_slug %>
+          <% when "choleric" %>
+            <i class="fas fa-fire"></i>
+          <% when "sanguine" %>
+            <i class="fas fa-sun"></i>
+          <% when "melancholic" %>
+            <i class="fas fa-book-open"></i>
+          <% when "phlegmatic" %>
+            <i class="fas fa-leaf"></i>
+          <% end %>
+        </span>
+        Temperamento Dominante: <%= @dominant_temperament_name %>
+      </h2>
+
+      <%# A descrição continua a mesma, mas agora também usa o slug %>
+      <p class="description">
+        <% case @dominant_slug %>
+        <% when "sanguine" %>
+          Pessoas com temperamento sanguíneo são geralmente otimistas, sociáveis, carismáticas e aventureiras. Gostam de interações sociais e de fazer novos amigos.
+        <% when "choleric" %>
+          Os coléricos são líderes natos, focados, assertivos e independentes. São movidos por desafios e têm uma grande capacidade de planejamento e resolução de problemas.
+        <% when "melancholic" %>
+          Indivíduos melancólicos são detalhistas, profundos, sensíveis e analíticos. Tendem a ser perfeccionistas e apreciam a beleza, a ordem e a arte.
+        <% when "phlegmatic" %>
+          Os fleumáticos são conhecidos por serem calmos, equilibrados, diplomáticos e confiáveis. São excelentes ouvintes e preferem a estabilidade e a rotina.
+        <% end %>
+      </p>
+    </div>
+
+    <hr>
+
+    <h3>Pontuação Completa:</h3>
+    <ul class="score-list">
+      <% @all_scores.each do |slug, data| %>
+        <li class="temperament-<%= slug %>">
+          <strong><%= data[:name] %>:</strong> <%= data[:score] %> pontos
+        </li>
+      <% end %>
+    </ul>
+
+  <% else %>
+    <p>Nenhum teste foi concluído ainda.</p>
+  <% end %>
+
+  <%= button_to "Fazer o Teste Novamente", reset_test_path, method: :post, class: "button" %>
+</div>
+
+<style>
+  .result-page h2 { font-size: 2em; }
+  .dominant-result { margin-bottom: 30px; }
+  .description { font-size: 1.1em; line-height: 1.6; max-width: 600px; margin: 10px auto; color: #555; }
+  .score-list { list-style: none; padding: 0; }
+  .score-list li { margin: 8px 0; font-size: 1.2em; font-weight: bold; }
+  .score-list li strong { font-weight: normal; }
+</style>

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sanguine: 1
+  choleric: 1
+  melancholic: 1
+  phlegmatic: 1
+
+two:
+  sanguine: 1
+  choleric: 1
+  melancholic: 1
+  phlegmatic: 1

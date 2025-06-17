@@ -1,0 +1,16 @@
+<div class="hero-section">
+  <div class="hero-content">
+    <h1 class="hero-title">Descubra Seu Verdadeiro Temperamento.</h1>
+    <p class="hero-subtitle">
+      Responda ao nosso questionário completo de 40 afirmações, baseado nos quatro temperamentos clássicos, e inicie sua jornada de autoconhecimento.
+    </p>
+    <div class="hero-cta">
+  <%= button_to "Começar o Teste Agora", 
+              start_test_path, 
+              method: :post, 
+              class: "button large-button", 
+              form: { "data-turbo": "false" } %>      
+      <p class="hero-subtext">Rápido, gratuito e revelador.</p>
+    </div>
+  </div>
+</div>

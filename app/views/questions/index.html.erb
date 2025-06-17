@@ -1,0 +1,85 @@
+<div class="quiz-container">
+  <% if @question %>
+
+<div class="progress-info">
+  <span>Questão <%= @current_question_number %> de <%= @total_questions %></span>
+  <div class="progress-bar-container">
+    <%# A mágica acontece aqui, no estilo inline 'width' %>
+    <div class="progress-bar-fill" style="width: <%= (@current_question_number.to_f / @total_questions.to_f) * 100 %>%;"></div>
+  </div>
+</div>
+
+    <h1 class="question-text"><%= @question.content %></h1>
+<%# Adicione este bloco logo abaixo da linha com <h1 class="question-text"> %>
+
+<% if @question.example.present? %>
+  <div class="example-section">
+    <button id="toggle-example-btn" class="example-button">Ver Exemplo</button>
+    <div id="example-text" class="example-text-box" style="display: none;">
+      <%= @question.example %>
+    </div>
+  </div>
+<% end %>
+
+    <div class="answers">
+  <%= button_to "Pouco", 
+                answer_path(question_id: @question.id, score: 1), 
+                method: :post, 
+                class: "answer-button-intensity" %>
+
+  <%= button_to "Médio", 
+                answer_path(question_id: @question.id, score: 2), 
+                method: :post, 
+                class: "answer-button-intensity medium" %>
+
+  <%= button_to "Muito", 
+                answer_path(question_id: @question.id, score: 3), 
+                method: :post, 
+                class: "answer-button-intensity high" %>
+</div>
+
+  <% else %>
+    <h1>Questionário não encontrado ou finalizado.</h1>
+    <p>Verifique se o banco de dados foi populado com as perguntas.</p>
+    <%= link_to "Ver Resultado Final", results_path, class: "button" %>
+  <% end %>
+
+<script>
+  // Criamos uma função para poder chamá-la em diferentes eventos
+  function setupExampleToggle() {
+    const toggleButton = document.getElementById('toggle-example-btn');
+    const exampleText = document.getElementById('example-text');
+
+    // Se o botão e o texto existem na página...
+    if (toggleButton && exampleText) {
+
+      // Uma verificação para não adicionar o mesmo "ouvinte" de clique várias vezes
+      if (toggleButton.dataset.listenerAttached) {
+        return;
+      }
+
+      toggleButton.addEventListener('click', () => {
+        const isHidden = exampleText.style.display === 'none';
+
+        if (isHidden) {
+          exampleText.style.display = 'block';
+          toggleButton.textContent = 'Ocultar Exemplo';
+        } else {
+          exampleText.style.display = 'none';
+          toggleButton.textContent = 'Ver Exemplo';
+        }
+      });
+
+      // Marca o botão para sabermos que o "ouvinte" já foi adicionado
+      toggleButton.dataset.listenerAttached = 'true';
+    }
+  }
+
+  // Agora, ouvimos tanto o evento de carregamento inicial quanto as navegações do Turbo
+  document.addEventListener('turbo:load', setupExampleToggle);
+  document.addEventListener('DOMContentLoaded', setupExampleToggle);
+</script>
+</div>
+
+</div>
+

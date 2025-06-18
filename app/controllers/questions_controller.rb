@@ -1,102 +1,106 @@
 class QuestionsController < ApplicationController
-  # Mantemos os métodos do scaffold, eles ainda podem ser úteis para manutenção
-  before_action :set_question, only: %i[ show edit update destroy ]
-
   # Esta é a nossa tela principal do quiz
   def index
-    # Encontra a pergunta pelo ID passado na URL, ou pega a primeira se nenhum ID for passado.
-    @question = Question.find_by(id: params[:question_id]) || Question.first
+    # Se a ordem de perguntas não existir na sessão, significa que o teste não foi iniciado.
+    # Redirecionamos para a ação que inicia o teste.
+    redirect_to start_test_path and return unless session[:question_order]
 
-    if @question
-      # Carrega as respostas associadas a essa pergunta
-      @total_questions = Question.count
-      @current_question_number = Question.where("id <= ?", @question.id).count
+    question_index = session[:current_question_index].to_i
+    
+    # Verifica se o teste ainda não terminou
+    if question_index < session[:question_order].length
+      question_id = session[:question_order][question_index]
+      @question = Question.find(question_id)
+      
+      # A lógica da barra de progresso agora usa o índice da sessão
+      @total_questions = session[:question_order].length
+      @current_question_number = question_index + 1
     else
-      # Se não há mais perguntas, significa que o teste acabou.
+      # Se o índice ultrapassou o número de perguntas, o teste acabou.
       redirect_to results_path, notice: "Teste finalizado!"
     end
   end
 
-  # Esta ação processa a resposta do usuário
-  def submit_answer
-  # Busca o resultado do teste pela sessão
-  test_result = TestResult.find(session[:test_result_id])
-
-  # Encontra a afirmação que foi respondida para saber seu temperamento
-  question = Question.find(params[:question_id])
-
-  # Pega a pontuação do botão clicado (1, 2, ou 3)
-  score = params[:score].to_i
-
-  # Usa um 'case' no temperamento da PRÓPRIA PERGUNTA
-  # para saber qual contador incrementar com a nova pontuação
-  case question.temperament_type
-  when "sanguine"
-    test_result.sanguine += score
-  when "choleric"
-    test_result.choleric += score
-  when "melancholic"
-    test_result.melancholic += score
-  when "phlegmatic"
-    test_result.phlegmatic += score
-  end
-
-  # Salva o resultado atualizado no banco de dados
-  test_result.save!
-
-  # A lógica para encontrar a próxima pergunta continua a mesma
-  next_question = Question.where("id > ?", question.id).order(:id).first
-
-  if next_question
-    redirect_to questions_path(question_id: next_question.id)
-  else
-    redirect_to results_path
-  end
-  end
-
+  # Cria um novo teste, com uma nova ordem de perguntas
   def start_test
-  test_result = TestResult.create!
-  session[:test_result_id] = test_result.id
-
-  respond_to do |format|
-    format.html { redirect_to questions_path, notice: "O teste começou!" }
-  end
-end
-
-  # Métodos do scaffold abaixo...
-  def show; end
-  def new; @question = Question.new; end
-  def edit; end
-
-  def create
-    @question = Question.new(question_params)
-    if @question.save
-      redirect_to @question, notice: "Pergunta criada com sucesso."
-    else
-      render :new
+    test_result = TestResult.create!
+    session[:test_result_id] = test_result.id
+    
+    # AQUI ESTÁ A MÁGICA:
+    # 1. Pega o ID de todas as perguntas.
+    # 2. Embaralha (.shuffle) a ordem desses IDs.
+    # 3. Guarda essa ordem aleatória na sessão.
+    session[:question_order] = Question.pluck(:id).shuffle
+    session[:current_question_index] = 0 # Começa no primeiro item da lista (índice 0)
+    session[:question_history] = []
+    
+    respond_to do |format|
+      format.html { redirect_to questions_path, notice: "O teste começou!" }
     end
   end
 
-  def update
-    if @question.update(question_params)
-      redirect_to @question, notice: "Pergunta atualizada com sucesso."
-    else
-      render :edit
+  # Processa a resposta e avança para o próximo índice
+  def submit_answer
+    test_result = TestResult.find(session[:test_result_id])
+    answered_question = Question.find(params[:question_id])
+    score_to_add = params[:score].to_i
+
+    # Salva a pontuação
+    case answered_question.temperament_type
+    when "sanguine"
+      test_result.sanguine += score_to_add
+    when "choleric"
+      test_result.choleric += score_to_add
+    when "melancholic"
+      test_result.melancholic += score_to_add
+    when "phlegmatic"
+      test_result.phlegmatic += score_to_add
     end
+    test_result.save!
+
+    # Salva a ação no histórico
+    session[:question_history] << {
+      question_id: answered_question.id,
+      temperament: answered_question.temperament_type,
+      score: score_to_add,
+      # Guardamos o índice para o botão de voltar saber para onde ir
+      index: session[:current_question_index] 
+    }
+
+    # AVANÇA PARA A PRÓXIMA PERGUNTA
+    session[:current_question_index] += 1
+    
+    # Redireciona para a ação index, que mostrará a pergunta do novo índice
+    redirect_to questions_path
   end
 
-  def destroy
-    @question.destroy
-    redirect_to questions_url, notice: "Pergunta destruída com sucesso."
-  end
-
-  private
-
-  def set_question
-    @question = Question.find(params[:id])
-  end
-
-  def question_params
-    params.require(:question).permit(:content)
+  # Volta para o índice anterior
+  def go_back
+    last_action = session[:question_history].pop
+  
+    if last_action
+      # Reverte a pontuação
+      test_result = TestResult.find(session[:test_result_id])
+      score_to_remove = last_action["score"]
+  
+      case last_action["temperament"]
+      when "sanguine"
+        test_result.sanguine -= score_to_remove
+      when "choleric"
+        test_result.choleric -= score_to_remove
+      when "melancholic"
+        test_result.melancholic -= score_to_remove
+      when "phlegmatic"
+        test_result.phlegmatic -= score_to_remove
+      end
+      test_result.save!
+  
+      # VOLTA PARA O ÍNDICE ANTERIOR
+      session[:current_question_index] = last_action["index"]
+      
+      redirect_to questions_path
+    else
+      redirect_to questions_path
+    end
   end
 end

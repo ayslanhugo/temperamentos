@@ -217,7 +217,6 @@ p {
   height: 100%;
   background-color: var(--primary); /* Usa nossa cor primária roxa */
   border-radius: 5px;
-  /* A ANIMAÇÃO! */
   transition: width 0.4s ease-in-out; 
 }
 
@@ -327,5 +326,253 @@ p {
   /* --- Página de Resultados --- */
   .result-page h2 {
     font-size: 1.6rem;
+  }
+}
+
+
+.header-container {
+  display: flex;
+  justify-content: space-between; /* Empurra o logo e a navegação para as extremidades */
+  align-items: center;
+  max-width: 900px; /* Largura máxima do conteúdo do header */
+  margin: 0 auto;     /* Centraliza o container */
+  padding: 0 20px;
+}
+
+.main-header h1 {
+  margin: 0;
+  font-size: 1.5em; /* Podemos diminuir um pouco o título */
+}
+
+.nav-button {
+  color: var(--text-dark);
+  text-decoration: none;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.nav-button:hover {
+  background-color: var(--bg-gradient-end);
+}
+
+.quiz-navigation {
+  /* Cria um espaço para o botão de voltar, mesmo quando ele não está visível */
+  min-height: 50px; 
+  margin-bottom: 20px;
+  text-align: left; /* Alinha o botão à esquerda */
+  opacity: 0;
+  animation: fadeInSlideUp 0.6s 0.3s ease-out forwards;
+}
+
+
+.subtle-back-button {
+  /* Remove todos os estilos de botão */
+  background: none;
+  border: none;
+  padding: 8px 0; /* Apenas um pouco de padding para área de clique */
+  box-shadow: none;
+  
+  /* Estilos de link */
+  color: var(--text-light); /* Usa nossa cor de texto cinza */
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1em;
+  
+  /* Alinhamento do ícone e texto */
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espaço entre o ícone e o texto */
+  
+  /* Remove o efeito de levantar no hover */
+  transition: color 0.2s ease;
+}
+
+.subtle-back-button:hover {
+  background: none; /* Garante que não haja fundo no hover */
+  box-shadow: none;
+  transform: none; 
+  
+  /* Efeito de hover sutil */
+  color: var(--primary); /* Fica roxo, nossa cor de destaque */
+  text-decoration: underline;
+}
+
+/* --- Estilos da Nova Lista de Pontuação com Barras --- */
+
+.score-list li {
+  margin: 15px 0;
+  font-size: 1em; /* Reduzimos um pouco o tamanho base */
+}
+
+.score-item {
+  display: grid;
+  grid-template-columns: 140px 1fr; /* Coluna p/ o nome, coluna p/ a barra */
+  gap: 15px;
+  align-items: center;
+}
+
+.temperament-label span {
+  /* A MÁGICA ACONTECE AQUI: */
+  display: inline-flex;   /* Transforma o span em um container flex */
+  align-items: center;    /* Alinha verticalmente o ícone e o texto dentro dele */
+}
+
+.temperament-label strong {
+  font-weight: 700;
+}
+
+.temperament-label .fas {
+  font-size: 0.8em;
+  margin-right: 8px;
+}
+
+.score-bar-container {
+  background-color: var(--border-color);
+  border-radius: 8px;
+  height: 32px;
+  overflow: hidden;
+}
+
+.score-bar {
+  /* Estilo da barra de preenchimento */
+ height: 100%;
+  color: white;
+  font-weight: 700;
+  text-align: right;
+  padding-right: 12px; /* <-- GARANTA QUE ESTA LINHA EXISTA */
+  line-height: 32px; 
+  white-space: nowrap;
+  transition: width 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Novas classes de BACKGROUND para as barras */
+.temperament-bg-choleric { background-color: #ef4444; } /* Vermelho */
+.temperament-bg-sanguine { background-color: #f97316; } /* Laranja */
+.temperament-bg-melancholic { background-color: #3b82f6; } /* Azul */
+.temperament-bg-phlegmatic { background-color: #22c55e; } /* Verde */
+
+/* ================================================= */
+/* 9. ESTILOS DA PÁGINA DE RESULTADO (VERSÃO FINAL)  */
+/* ================================================= */
+
+.result-page {
+  max-width: 750px; /* Um pouco mais largo */
+  padding: 40px 30px;
+}
+
+.dominant-result-wrapper {
+  text-align: center; /* Centraliza todo o bloco de destaque */
+}
+
+.result-page h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.secondary-influence {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  margin-top: -10px; /* Puxa para mais perto do título */
+}
+
+.description {
+  max-width: 600px;
+  margin: 25px auto 0 auto;
+}
+
+hr.result-divider {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 50px auto; /* Espaçamento grande para a linha */
+  width: 80%;
+}
+
+.full-scores-wrapper h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.score-list {
+  padding: 0;
+  list-style: none;
+}
+
+.score-item {
+  margin-bottom: 20px;
+}
+
+.temperament-label {
+  display: flex;
+  justify-content: space-between; /* Coloca o nome de um lado e a % do outro */
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 1.1em;
+}
+
+.score-percentage {
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.score-bar-container {
+  /* Estilo do container da barra */
+  background-color: var(--border-color);
+  border-radius: 10px;
+  height: 12px; /* Barras mais finas e elegantes */
+}
+
+.score-bar {
+  /* Removemos o texto de dentro da barra */
+  height: 100%;
+  border-radius: 10px;
+  transition: width 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.result-page .button {
+  margin-top: 40px; /* Espaço acima do botão final */
+}
+
+.secondary-influence {
+  font-size: 1.1em;
+  color: var(--text-light);
+  margin-top: 10px;
+  margin-bottom: 25px;
+  border-left: 3px solid var(--border-color);
+  padding-left: 15px;
+}
+
+/* Cores da borda para o card de destaque */
+.dominant-card-choleric { border-top-color: #ef4444; }
+.dominant-card-sanguine { border-top-color: #f97316; }
+.dominant-card-melancholic { border-top-color: #3b82f6; }
+.dominant-card-phlegmatic { border-top-color: #22c55e; }
+
+/* Deixa o botão de reset com menos destaque */
+.result-details .button {
+  background: var(--bg-gradient-end);
+  color: var(--primary);
+  border: 1px solid var(--border-color);
+  box-shadow: none;
+  margin-top: 30px;
+}
+.result-details .button:hover {
+  background: #e2e8f0;
+  color: var(--primary-hover);
+}
+
+.no-results {
+  grid-column: 1 / -1; /* Faz esta div ocupar todas as colunas */
+  text-align: center;
+  padding: 50px;
+}
+
+/* --- Ajuste Responsivo para o Novo Layout --- */
+@media (max-width: 900px) { /* Aumentamos o breakpoint */
+  .result-page-grid {
+    grid-template-columns: 1fr; /* Volta para uma única coluna */
   }
 }

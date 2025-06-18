@@ -1,14 +1,10 @@
 <div class="container result-page">
-  <h1>Seu Resultado</h1>
-
-  <% if @dominant_temperament_name %>
-    <div class="dominant-result">
-
-      <%# A tag h2 agora tem uma classe CSS dinâmica baseada no resultado %>
-      <h2 class="temperament-<%= @dominant_slug %>">
-        <%# Usamos um 'case' para escolher o ícone certo %>
+  
+  <% if @dominant %>
+    <div class="dominant-result-wrapper">
+      <h2 class="temperament-<%= @dominant[0] %>">
         <span class="icon">
-          <% case @dominant_slug %>
+          <% case @dominant[0] %>
           <% when "choleric" %>
             <i class="fas fa-fire"></i>
           <% when "sanguine" %>
@@ -19,47 +15,66 @@
             <i class="fas fa-leaf"></i>
           <% end %>
         </span>
-        Temperamento Dominante: <%= @dominant_temperament_name %>
+        Seu Temperamento Dominante é <%= @dominant[1][:name] %>
       </h2>
-
-      <%# A descrição continua a mesma, mas agora também usa o slug %>
+    
+      <p class="secondary-influence">
+        com uma forte influência secundária do temperamento <strong><%= @secondary[1][:name] %></strong>.
+      </p>
+    
       <p class="description">
-        <% case @dominant_slug %>
+        <% case @dominant[0] %>
         <% when "sanguine" %>
-          Pessoas com temperamento sanguíneo são geralmente otimistas, sociáveis, carismáticas e aventureiras. Gostam de interações sociais e de fazer novos amigos.
+          A combinação de um temperamento Sanguíneo dominante com uma influência secundária torna você uma pessoa extremamente sociável, otimista e carismática.
         <% when "choleric" %>
-          Os coléricos são líderes natos, focados, assertivos e independentes. São movidos por desafios e têm uma grande capacidade de planejamento e resolução de problemas.
+          Com o Colérico como dominante, você é um líder natural, focado e determinado. Sua influência secundária adiciona novos traços à sua personalidade.
         <% when "melancholic" %>
-          Indivíduos melancólicos são detalhistas, profundos, sensíveis e analíticos. Tendem a ser perfeccionistas e apreciam a beleza, a ordem e a arte.
+          Sua natureza primariamente Melancólica te faz detalhista, sensível e profundo. A influência secundária complementa isso com novas características.
         <% when "phlegmatic" %>
-          Os fleumáticos são conhecidos por serem calmos, equilibrados, diplomáticos e confiáveis. São excelentes ouvintes e preferem a estabilidade e a rotina.
+          Como um Fleumático dominante, você é calmo, equilibrado e confiável. Sua personalidade também é marcada por uma forte influência secundária.
         <% end %>
       </p>
     </div>
 
-    <hr>
+    <hr class="result-divider">
 
-    <h3>Pontuação Completa:</h3>
-    <ul class="score-list">
-      <% @all_scores.each do |slug, data| %>
-        <li class="temperament-<%= slug %>">
-          <strong><%= data[:name] %>:</strong> <%= data[:score] %> pontos
-        </li>
-      <% end %>
-    </ul>
+    <div class="full-scores-wrapper">
+      <h3>Sua Composição de Temperamentos</h3>
+      
+      <ul class="score-list">
+        <% @all_scores.each do |slug, data| %>
+          <li class="score-item">
 
+            <div class="temperament-label">
+
+              <span class="temperament-<%= slug %>">
+                <i class="fas fa-square"></i>
+                <strong><%= data[:name] %></strong>
+              </span>
+              
+              <span class="score-percentage">
+                <%= (data[:score].to_f / @total_score.to_f) * 100 %>
+                </span>
+            </div>
+            <div class="score-bar-container">
+              <div class="score-bar temperament-bg-<%= slug %>" 
+                   style="width: <%= (data[:score].to_f / @total_score.to_f) * 100 %>%;">
+              </div>
+            </div>
+
+          </li>
+        <% end %>
+      </ul>
+      
+    </div>
+
+    <%= button_to "Fazer o Teste Novamente", reset_test_path, method: :post, class: "button" %>
+  
   <% else %>
-    <p>Nenhum teste foi concluído ainda.</p>
+    <div class="no-results">
+      <p>Nenhum teste foi concluído ainda.</p>
+      <%= link_to "Começar um Teste", start_test_path, method: :post, class: "button large-button" %>
+    </div>
   <% end %>
 
-  <%= button_to "Fazer o Teste Novamente", reset_test_path, method: :post, class: "button" %>
 </div>
-
-<style>
-  .result-page h2 { font-size: 2em; }
-  .dominant-result { margin-bottom: 30px; }
-  .description { font-size: 1.1em; line-height: 1.6; max-width: 600px; margin: 10px auto; color: #555; }
-  .score-list { list-style: none; padding: 0; }
-  .score-list li { margin: 8px 0; font-size: 1.2em; font-weight: bold; }
-  .score-list li strong { font-weight: normal; }
-</style>

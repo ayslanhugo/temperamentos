@@ -21,6 +21,17 @@
   </div>
 <% end %>
 
+<%# Adicione este bloco no seu arquivo index.html.erb %>
+
+<div class="quiz-navigation">
+  <%# Este botão só aparece se o histórico não estiver vazio %>
+  <% if session[:question_history].present? %>
+<%= button_to go_back_path, method: :post, class: "subtle-back-button" do %>
+  <i class="fas fa-arrow-left"></i>
+  <span>Retornar para a pergunta anterior</span>
+<% end %>  <% end %>
+</div>
+
     <div class="answers">
   <%= button_to "Pouco", 
                 answer_path(question_id: @question.id, score: 1), 

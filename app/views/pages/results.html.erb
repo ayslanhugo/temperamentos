@@ -1,10 +1,11 @@
-<div class="container result-page">
-  
-  <% if @dominant %>
+<div class="content-card result-page">
+    
+  <% if @test_result %>
     <div class="dominant-result-wrapper">
-      <h2 class="temperament-<%= @dominant[0] %>">
+      <% dominant = @test_result.dominant_temperament %>
+      <h2 class="temperament-<%= dominant[0] %>">
         <span class="icon">
-          <% case @dominant[0] %>
+          <% case dominant[0] %>
           <% when "choleric" %>
             <i class="fas fa-fire"></i>
           <% when "sanguine" %>
@@ -15,15 +16,16 @@
             <i class="fas fa-leaf"></i>
           <% end %>
         </span>
-        Seu Temperamento Dominante é <%= @dominant[1][:name] %>
+        Seu Temperamento Dominante é <%= dominant[1][:name] %>
       </h2>
     
+      <% secondary = @test_result.secondary_temperament %>
       <p class="secondary-influence">
-        com uma forte influência secundária do temperamento <strong><%= @secondary[1][:name] %></strong>.
+        com uma forte influência secundária do temperamento <strong><%= secondary[1][:name] %></strong>.
       </p>
     
       <p class="description">
-        <% case @dominant[0] %>
+        <% case dominant[0] %>
         <% when "sanguine" %>
           A combinação de um temperamento Sanguíneo dominante com uma influência secundária torna você uma pessoa extremamente sociável, otimista e carismática.
         <% when "choleric" %>
@@ -40,32 +42,25 @@
 
     <div class="full-scores-wrapper">
       <h3>Sua Composição de Temperamentos</h3>
-      
       <ul class="score-list">
-        <% @all_scores.each do |slug, data| %>
+        
+        <% @test_result.sorted_scores.each do |slug, data| %>
           <li class="score-item">
-
             <div class="temperament-label">
-
               <span class="temperament-<%= slug %>">
                 <i class="fas fa-square"></i>
                 <strong><%= data[:name] %></strong>
               </span>
-              
-              <span class="score-percentage">
-                <%= (data[:score].to_f / @total_score.to_f) * 100 %>
-                </span>
+              <span class="score-percentage"><%= ((data[:score].to_f / @test_result.total_score) * 100).round(1) %>%</span>
             </div>
             <div class="score-bar-container">
               <div class="score-bar temperament-bg-<%= slug %>" 
-                   style="width: <%= (data[:score].to_f / @total_score.to_f) * 100 %>%;">
+                   style="width: <%= ((data[:score].to_f / @test_result.total_score) * 100).round(1) %>%;">
               </div>
             </div>
-
           </li>
         <% end %>
       </ul>
-      
     </div>
 
     <%= button_to "Fazer o Teste Novamente", reset_test_path, method: :post, class: "button" %>

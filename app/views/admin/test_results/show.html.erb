@@ -1,0 +1,119 @@
+<%# app/views/admin/test_results/show.html.erb %>
+
+<div class="content-card">
+  <div class="admin-header">
+    <h1>Resultado de: <%= @admin_test_result.name %></h1>
+  </div>
+
+  <p>
+    <strong>Realizado em:</strong>
+    <%= l @admin_test_result.created_at, format: :long %>
+  </p>
+
+  <div class="chart-container">
+    <canvas id="resultDetailChart" data-scores="<%= @admin_test_result.scores_hash.to_json %>"></canvas>
+  </div>
+
+  <hr class="result-divider">
+
+  <div class="admin-actions">
+    <%= link_to "Editar", edit_admin_test_result_path(@admin_test_result), class: "button secondary-button" %>
+    <%= link_to "Voltar para a lista", admin_test_results_path, class: "subtle-back-button" %>
+  </div>
+</div>
+
+<script>
+  // Esta função será chamada para tentar desenhar o gráfico
+  function drawAdminChart() {
+    console.log("PASSO 2: A função 'drawAdminChart' foi chamada (evento turbo:load funcionou).");
+
+    const canvasElement = document.getElementById('resultDetailChart');
+    console.log("PASSO 3: Procurando pelo canvas com id 'resultDetailChart'. Elemento encontrado:", canvasElement);
+
+    // Se o canvas não for encontrado, paramos e avisamos no console.
+    if (!canvasElement) {
+      console.error("ERRO: Não encontrei o elemento <canvas> na página. Verifique se o ID está correto no HTML.");
+      return; 
+    }
+
+    const scoresDataString = canvasElement.dataset.scores;
+    console.log("PASSO 4: Pegando os dados do atributo data-scores. Dados (como texto):", scoresDataString);
+
+    // Se os dados estiverem vazios, paramos.
+    if (!scoresDataString || scoresDataString === "{}") {
+      console.error("ERRO: Os dados dos scores estão vazios. O @admin_test_result pode não ter pontuações.");
+      return;
+    }
+
+    try {
+      const scoresData = JSON.parse(scoresDataString);
+      console.log("PASSO 5: Dados convertidos de JSON para objeto JavaScript:", scoresData);
+      
+      const labels = ["Colérico", "Sanguíneo", "Melancólico", "Fleumático"];
+      const dataPoints = [
+        scoresData.choleric.score,
+        scoresData.sanguine.score,
+        scoresData.melancholic.score,
+        scoresData.phlegmatic.score
+      ];
+      const backgroundColors = ['rgba(239, 68, 68, 0.8)', 'rgba(249, 115, 22, 0.8)', 'rgba(59, 130, 246, 0.8)', 'rgba(34, 197, 94, 0.8)'];
+      const borderColors = ['#ffffff', '#ffffff', '#ffffff', '#ffffff'];
+
+      new Chart(canvasElement, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Pontuação',
+            data: dataPoints,
+            backgroundColor: backgroundColors,
+            borderColor: borderColors,
+            borderWidth: 3,
+            hoverOffset: 15
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { padding: 20, font: { size: 14 } }
+            }
+          }
+        }
+      });
+
+      console.log("PASSO 6: Gráfico criado pela biblioteca Chart.js com sucesso!");
+
+    } catch (e) {
+      console.error("ERRO FATAL: Falha ao processar os dados ou criar o gráfico. Detalhes:", e);
+    }
+  }
+
+  // A primeira mensagem que deve aparecer
+  console.log("PASSO 1: O bloco de script da página de resultados foi lido pelo navegador.");
+  
+  // Adicionamos os 'ouvintes' de evento
+  document.addEventListener('turbo:load', drawAdminChart);
+  document.addEventListener('DOMContentLoaded', drawAdminChart); // Adicionamos este por segurança
+</script>
+
+<%# Se o seu CSS para .chart-container ainda não foi adicionado, garanta que ele exista %>
+<%# em app/assets/stylesheets/custom.css %>
+<style>
+  .chart-container {
+    position: relative;
+    height: 350px;
+    width: 100%;
+    max-width: 350px;
+    margin: 20px auto 40px auto;
+  }
+  .admin-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+</style>

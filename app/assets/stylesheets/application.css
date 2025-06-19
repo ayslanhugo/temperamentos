@@ -125,6 +125,7 @@ p {
   margin-bottom: 20px;
   color: var(--primary);
   background: -webkit-linear-gradient(45deg, var(--primary), #3b82f6);
+  background-clip: text; 
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -470,5 +471,180 @@ hr.result-divider {
 
   .result-page h2 {
     font-size: 1.6rem;
+  }
+}
+
+.start-test-form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.name-input {
+  font-size: 1.1rem;
+  padding: 15px 20px;
+  border-radius: 50px;
+  border: 1px solid var(--border-color);
+  width: 300px;
+}
+
+.name-input:focus {
+  outline: 2px solid var(--primary);
+}
+
+/* ================================================= */
+/* 10. Estilos do Dashboard Administrativo           */
+/* ================================================= */
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto; /* Garante que a tabela não quebre o layout em telas menores */
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse; /* Tira o espaçamento duplo das bordas */
+}
+
+.admin-table th, .admin-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table th {
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 0.5px;
+}
+
+.admin-table tbody tr:hover {
+  background-color: var(--bg-gradient-end); /* Efeito de hover na linha */
+}
+
+.text-center {
+  text-align: center;
+}
+
+.main-link {
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+}
+.main-link:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+.action-link {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 0.9em;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+.action-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.action-link.danger:hover {
+  color: var(--choleric-color); /* reusamos a cor vermelha */
+}
+
+/* ================================================= */
+/* 10. Estilos da Seção de Detalhes dos Temperamentos */
+/* ================================================= */
+
+.temperament-details-section {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.temperament-details-section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.section-subtitle {
+  max-width: 600px;
+  margin: 0 auto 40px auto;
+  color: var(--text-light);
+}
+
+.temperament-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 colunas */
+  gap: 25px;
+  text-align: left;
+}
+
+.temperament-card {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.temperament-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px var(--shadow-color);
+}
+
+.temperament-card h4 {
+  margin-top: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.temperament-card p {
+  font-size: 0.95em;
+  line-height: 1.6;
+  color: var(--text-light);
+  margin-bottom: 10px;
+}
+
+.temperament-card p strong {
+  color: var(--text-dark);
+}
+
+/* --- Ajuste Responsivo para os Cards --- */
+@media (max-width: 768px) {
+  .temperament-details-grid {
+    grid-template-columns: 1fr; /* Uma coluna no celular */
   }
 }

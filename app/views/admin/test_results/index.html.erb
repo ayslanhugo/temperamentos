@@ -1,0 +1,42 @@
+<%# app/views/admin/test_results/index.html.erb %>
+
+<div class="content-card">
+  
+  <div class="admin-header">
+    <h1>Dashboard de Resultados</h1>
+    <%= link_to "Adicionar Resultado Manual", new_admin_test_result_path, class: "button" %>
+  </div>
+
+  <div id="admin_test_results" class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th class="text-center">Sanguíneo</th>
+          <th class="text-center">Colérico</th>
+          <th class="text-center">Melancólico</th>
+          <th class="text-center">Fleumático</th>
+          <th>Realizado em</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @admin_test_results.each do |test_result| %>
+          <tr id="<%= dom_id(test_result) %>">
+            <td><%= link_to test_result.name, admin_test_result_path(test_result), class: "main-link" %></td>
+            <td class="text-center"><%= test_result.sanguine %></td>
+            <td class="text-center"><%= test_result.choleric %></td>
+            <td class="text-center"><%= test_result.melancholic %></td>
+            <td class="text-center"><%= test_result.phlegmatic %></td>
+            <td><%= l test_result.created_at, format: :short %></td>
+            <td class="actions">
+              <%= link_to 'Ver', admin_test_result_path(test_result), class: "action-link" %>
+              <%= button_to 'Apagar', admin_test_result_path(test_result), method: :delete, class: "action-link danger", form: { data: { turbo_confirm: 'Você tem certeza?' } } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

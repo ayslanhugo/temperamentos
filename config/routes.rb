@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :test_results
+  end
   resources :questions
   root "pages#home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

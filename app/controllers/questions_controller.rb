@@ -21,9 +21,10 @@ class QuestionsController < ApplicationController
 
   # Cria um novo teste, com uma nova ordem de perguntas
   def start_test
-    test_result = TestResult.create!
+    test_result = TestResult.create!(name: params[:name])
     session[:test_result_id] = test_result.id
-    
+    puts "============================================="
+    puts "--- AÇÃO: start_test ---"
     session[:question_order] = Question.pluck(:id).shuffle
     session[:current_question_index] = 0
     session[:question_history] = []

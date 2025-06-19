@@ -1,4 +1,4 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  # allow_browser versions: :modern
+  # Este é o controller principal da sua aplicação.
+  # Para nosso projeto, ele pode ficar assim, vazio e limpo.
 end

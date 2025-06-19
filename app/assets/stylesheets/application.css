@@ -13,10 +13,10 @@
   --border-color: #e2e8f0;
 
   /* Cores dos Temperamentos */
-  --choleric-color: #ef4444;    /* Vermelho */
-  --sanguine-color: #f97316;    /* Laranja */
-  --melancholic-color: #3b82f6; /* Azul */
-  --phlegmatic-color: #22c55e;   /* Verde */
+  --choleric-color: #ef4444;
+  --sanguine-color: #f97316;
+  --melancholic-color: #3b82f6;
+  --phlegmatic-color: #22c55e;
 }
 
 body {
@@ -37,8 +37,13 @@ p {
   line-height: 1.7;
 }
 
+@keyframes fadeInSlideUp {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ==========================================================================
-   2. Layout Principal (Header, Footer, Main)
+   2. Layout Principal (Header, Footer, Content Card)
    ========================================================================== */
 .main-content {
   flex-grow: 1;
@@ -48,14 +53,13 @@ p {
   background-color: transparent;
   padding: 25px 0;
   border-bottom: 1px solid var(--border-color);
-  text-align: center;
 }
 
 .header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1100px; /* Aumentamos um pouco para dar mais espaço */
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -97,6 +101,19 @@ p {
   font-size: 0.9em;
 }
 
+/* Estilo base para os cards principais da aplicação */
+.content-card {
+  background-color: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px var(--shadow-color);
+  border-radius: 16px;
+  animation: fadeInSlideUp 0.7s ease-out forwards;
+  margin: 40px auto;
+  max-width: 750px;
+  padding: 40px 50px;
+}
+
 /* ==========================================================================
    3. Estilos da Página Inicial (Hero Section)
    ========================================================================== */
@@ -107,11 +124,6 @@ p {
   padding: 60px 20px;
   min-height: 70vh;
   text-align: center;
-  background-color: var(--bg-gradient-end);
-  background-image:
-    radial-gradient(circle at 1px 1px, var(--border-color) 1px, transparent 0),
-    radial-gradient(circle at 15px 15px, var(--border-color) 1px, transparent 0);
-  background-size: 30px 30px;
 }
 
 .hero-content {
@@ -125,7 +137,7 @@ p {
   margin-bottom: 20px;
   color: var(--primary);
   background: -webkit-linear-gradient(45deg, var(--primary), #3b82f6);
-  background-clip: text; 
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -143,21 +155,28 @@ p {
   margin-top: 15px;
 }
 
+.start-test-form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.name-input {
+  font-size: 1.1rem;
+  padding: 15px 20px;
+  border-radius: 50px;
+  border: 1px solid var(--border-color);
+  width: 300px;
+}
+
+.name-input:focus {
+  outline: 2px solid var(--primary);
+}
+
 /* ==========================================================================
    4. Estilos da Página do Quiz
    ========================================================================== */
-.quiz-container {
-  background-color: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 25px var(--shadow-color);
-  margin: 40px auto;
-  padding: 40px 50px;
-  max-width: 700px;
-  border-radius: 16px;
-  animation: fadeInSlideUp 0.7s ease-out forwards;
-}
-
 .question-text {
   opacity: 0;
   animation: fadeInSlideUp 0.6s 0.3s ease-out forwards;
@@ -205,21 +224,6 @@ p {
   margin-top: 40px;
   opacity: 0;
   animation: fadeInSlideUp 0.6s 0.3s ease-out forwards;
-}
-
-/* Estilo base para os cards principais da aplicação */
-.content-card {
-  background-color: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 25px var(--shadow-color);
-  border-radius: 16px;
-  animation: fadeInSlideUp 0.7s ease-out forwards;
-
-  /* A MÁGICA DA CENTRALIZAÇÃO ACONTECE AQUI: */
-  margin: 40px auto; 
-  max-width: 750px;
-  padding: 40px 50px;
 }
 
 /* ==========================================================================
@@ -322,11 +326,20 @@ p {
   background-color: #f1f5f9;
 }
 
+.example-text-box {
+  background-color: #f8fafc;
+  border-left: 4px solid var(--primary);
+  margin-top: 15px;
+  padding: 15px;
+  text-align: left;
+  font-style: italic;
+  color: #343a40;
+}
+
 /* ==========================================================================
    6. Estilos da Página de Resultados
    ========================================================================== */
 .result-page {
-  max-width: 750px;
   text-align: center;
 }
 
@@ -361,6 +374,7 @@ hr.result-divider {
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 25px;
+  text-align: center;
 }
 
 .score-list {
@@ -404,6 +418,7 @@ hr.result-divider {
   background-color: var(--border-color);
   border-radius: 10px;
   height: 12px;
+  overflow: hidden;
 }
 
 .score-bar {
@@ -415,172 +430,6 @@ hr.result-divider {
 .result-page .button {
   margin-top: 40px;
 }
-
-/* Cores dos resultados (texto e ícone) */
-.temperament-choleric { color: var(--choleric-color); }
-.temperament-sanguine { color: var(--sanguine-color); }
-.temperament-melancholic { color: var(--melancholic-color); }
-.temperament-phlegmatic { color: var(--phlegmatic-color); }
-
-/* Cores de fundo das barras de progresso */
-.temperament-bg-choleric { background-color: var(--choleric-color); }
-.temperament-bg-sanguine { background-color: var(--sanguine-color); }
-.temperament-bg-melancholic { background-color: var(--melancholic-color); }
-.temperament-bg-phlegmatic { background-color: var(--phlegmatic-color); }
-
-@keyframes fadeInSlideUp {
-  from { opacity: 0; transform: translateY(25px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ==========================================================================
-   7. Estilos Responsivos
-   ========================================================================== */
-@media (max-width: 768px) {
-  .main-header h1 {
-    font-size: 1.5rem;
-  }
-  
-  .hero-title {
-    font-size: 2.5rem;
-    line-height: 1.2;
-  }
-
-  .hero-subtitle {
-    font-size: 1.1rem;
-  }
-
-  .quiz-container, .result-page {
-    margin: 20px 15px;
-    padding: 30px 25px;
-  }
-
-  .question-text {
-    font-size: 1.7rem;
-  }
-
-  .answers {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .answer-button-intensity {
-    width: 100%;
-    padding: 15px 20px;
-  }
-
-  .result-page h2 {
-    font-size: 1.6rem;
-  }
-}
-
-.start-test-form {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  align-items: stretch;
-}
-
-.name-input {
-  font-size: 1.1rem;
-  padding: 15px 20px;
-  border-radius: 50px;
-  border: 1px solid var(--border-color);
-  width: 300px;
-}
-
-.name-input:focus {
-  outline: 2px solid var(--primary);
-}
-
-/* ================================================= */
-/* 10. Estilos do Dashboard Administrativo           */
-/* ================================================= */
-
-.admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.admin-header h1 {
-  font-size: 1.8rem;
-  margin: 0;
-}
-
-.table-responsive {
-  width: 100%;
-  overflow-x: auto; /* Garante que a tabela não quebre o layout em telas menores */
-}
-
-.admin-table {
-  width: 100%;
-  border-collapse: collapse; /* Tira o espaçamento duplo das bordas */
-}
-
-.admin-table th, .admin-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.admin-table th {
-  font-weight: 700;
-  color: var(--text-light);
-  text-transform: uppercase;
-  font-size: 0.8em;
-  letter-spacing: 0.5px;
-}
-
-.admin-table tbody tr:hover {
-  background-color: var(--bg-gradient-end); /* Efeito de hover na linha */
-}
-
-.text-center {
-  text-align: center;
-}
-
-.main-link {
-  font-weight: 700;
-  color: var(--primary);
-  text-decoration: none;
-}
-.main-link:hover {
-  text-decoration: underline;
-}
-
-.actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-}
-
-.action-link {
-  color: var(--text-light);
-  text-decoration: none;
-  font-size: 0.9em;
-  font-weight: 700;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  font-family: 'Roboto', sans-serif;
-}
-.action-link:hover {
-  color: var(--primary);
-  text-decoration: underline;
-}
-
-.action-link.danger:hover {
-  color: var(--choleric-color); /* reusamos a cor vermelha */
-}
-
-/* ================================================= */
-/* 10. Estilos da Seção de Detalhes dos Temperamentos */
-/* ================================================= */
 
 .temperament-details-section {
   text-align: center;
@@ -601,7 +450,7 @@ hr.result-divider {
 
 .temperament-details-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 2 colunas */
+  grid-template-columns: 1fr 1fr;
   gap: 25px;
   text-align: left;
 }
@@ -642,8 +491,159 @@ hr.result-divider {
   color: var(--text-dark);
 }
 
-/* --- Ajuste Responsivo para os Cards --- */
+
+/* Cores dos resultados (texto e ícone) */
+.temperament-choleric { color: var(--choleric-color); }
+.temperament-sanguine { color: var(--sanguine-color); }
+.temperament-melancholic { color: var(--melancholic-color); }
+.temperament-phlegmatic { color: var(--phlegmatic-color); }
+
+/* Cores de fundo das barras de progresso */
+.temperament-bg-choleric { background-color: var(--choleric-color); }
+.temperament-bg-sanguine { background-color: var(--sanguine-color); }
+.temperament-bg-melancholic { background-color: var(--melancholic-color); }
+.temperament-bg-phlegmatic { background-color: var(--phlegmatic-color); }
+
+/* ==========================================================================
+   7. Estilos do Dashboard Administrativo
+   ========================================================================== */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th, .admin-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table th {
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 0.5px;
+}
+
+.admin-table tbody tr:hover {
+  background-color: var(--bg-gradient-end);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.main-link {
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+}
+.main-link:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+.action-link {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 0.9em;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.action-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.action-link.danger:hover {
+  color: var(--choleric-color);
+}
+
+/* ==========================================================================
+   8. Estilos Responsivos
+   ========================================================================== */
 @media (max-width: 768px) {
+  /* --- Cabeçalho --- */
+  .main-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  /* --- Página Inicial (Hero Section) --- */
+  .hero-section {
+    padding: 40px 20px;
+  }
+  .hero-title {
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  .start-test-form {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  .name-input {
+    width: auto;
+    text-align: center;
+  }
+  .large-button {
+    padding: 15px 25px;
+    font-size: 1.1rem;
+  }
+
+  /* --- Cards Gerais e Página do Quiz --- */
+  .content-card {
+    margin: 20px 15px;
+    padding: 30px 25px;
+  }
+  .question-text {
+    font-size: 1.7rem;
+  }
+  .answers {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .answer-button-intensity {
+    width: 100%;
+  }
+
+  /* --- Página de Resultados --- */
+  .result-page h2 {
+    font-size: 1.6rem;
+  }
+
   .temperament-details-grid {
     grid-template-columns: 1fr; /* Uma coluna no celular */
   }
